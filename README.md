@@ -5,16 +5,17 @@
 **Descrição:** Implementação - Integração com Apache Kafka.
 
 **Integrantes:**
-| RM     	| NOME                     	    |
-|--------	|------------------------------	|
-| 334242 	| BRUNO DELPHINO ZAMBOTTI    	|
-| 333652  	| BRUNO AGUIAR CLEMENTE      	|
-| 334151 	| MARCELO TADEU MARCHESONI ZANI	|
+
+| RM      | NOME                     	  |
+|-------- |-------------------------------|
+| 334242  | BRUNO DELPHINO ZAMBOTTI       |
+| 333652  | BRUNO AGUIAR CLEMENTE         |
+| 334151  | MARCELO TADEU MARCHESONI ZANI |
 
 ## Informações Gerais
 Este projeto realiza operações de produção e consumo de mensagens em um tópico do kafka, conforme imagem abaixo:
 
-![Macrovisão](https://cdn.pixabay.com/photo/2019/10/15/05/12/bulbs-4550601_960_720.jpg)
+![Macrovisão](https://github.com/bruno-zambotti/trabalho-integration-and-development-tools-34scj/blob/master/assets/macrovisao.png?raw=true)
 
 O producer desenvolvido em python carrega informações de um arquivo reduzido em tamanho em relação ao original com 10.000 registros contra os 13.872.315 registros do arquivo original. 
 Esse producer prepara mensagens em formato json para cada um dos registros lidos e posta no tópico do kafka para que os consumidores processem de acordo com sua necessidade específica.
