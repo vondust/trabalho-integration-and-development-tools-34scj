@@ -20,7 +20,7 @@ Este projeto realiza operações de produção e consumo de mensagens em um tóp
 O producer desenvolvido em python carrega informações de um arquivo reduzido em tamanho em relação ao original com 10.000 registros contra os 13.872.315 registros do arquivo original. 
 Esse producer prepara mensagens em formato json para cada um dos registros lidos e posta no tópico do kafka para que os consumidores processem de acordo com sua necessidade específica.
 
-Foram desenvolvidos três consumidores na linguagem {} que realizam os seguintes tratamentos:
+Foram desenvolvidos três consumidores na linguagem java que realizam os seguintes tratamentos:
 - Consumidor 1:
   - Exibe [UF] + [soma da parcelas por UF] + [quantidade de beneficiários]; 
   - A cada consumo de uma mensagem do tópico do kafka é exibido no console o resultado calculado para cada registro, desta forma, a quantidade de UF retornadas aumenta na medida que forem processados os registros dos beneficiários.
