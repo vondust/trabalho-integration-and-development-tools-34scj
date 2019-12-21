@@ -54,6 +54,31 @@ Foram desenvolvidos três consumidores na linguagem java que realizam os seguint
 - [Instruções para instalação no Linux](https://docs.docker.com/compose/install/#install-compose)
 - Não se faz necessário para ambiente Windows pois o Docker Compose já está incluso na instalação do Docker.
 
+### Java
+- Linguagem:
+  - [Link para Download](https://www.oracle.com/technetwork/pt/java/javase/downloads/jdk8-downloads-2133151.html)
+  - Validação: Execute em um terminal o seguinte comando:
+    > java --version
+- Configuração da variável de ambiente do Java em ambientes Windows. 
+  - Execute os seguintes comandos abaixo:
+    > setx -m JAVA_HOME "C:\Program Files\Java\jdk1.8.0"
+
+    Nota: O diretório informado é apenas um exemplo.
+
+    > setx -m PATH "%PATH%;%JAVA_HOME%\bin";
+  - Validação: Execute em um terminal o seguinte comando:
+    > echo %JAVA_HOME%
+
+- Configuração da variável de ambiente do Java em ambientes Unix. 
+  - Execute os seguintes comandos abaixo:
+    > export JAVA_HOME="/var/usr/java". 
+    
+    Nota: O diretório informado é apenas um exemplo.
+
+    > export PATH=$JAVA_HOME/bin:$PATH
+  - Validação: Execute em um terminal o seguinte comando:
+    > echo $JAVA_HOME
+
 ### Python
 - Linguagem:
   - [Link para Download](https://www.python.org/downloads/)
@@ -71,6 +96,8 @@ Foram desenvolvidos três consumidores na linguagem java que realizam os seguint
     > virtualenv --version
 
 ## Configuração do Ambiente
+
+### Python
 Para configurar o ambiente virtual (opcional) do python de forma a evitar a instalação de bibliotecas diretamente em seu computador, execute os seguintes passos no terminal:
 > virtualenv -p python .env
 
@@ -81,10 +108,16 @@ Para sistemas Windows (necessária a utilização do powershell):
 > powershell .env/Scripts/activate.ps1
 
 Após a instalação do ambiente virtual execute o seguinte comando em um terminal a partir da raiz deste projeto:
-> pip install -r \kafka-producer-python\requirements.txt
+> pip install -r "kafka-producer-python\requirements.txt"
 
 Caso não esteja utilizando o virtualenv e queira remover os pacotes baixados no passo anterior execute o comando abaixo em um terminal:
-> pip uninstall -r \kafka-producer-python\requirements.txt
+> pip uninstall -r "kafka-producer-python\requirements.txt"
+
+### Java
+
+Na raiz de cada um projetos em java, execute o seguinte comando para instalar as dependências:
+
+> mvnw install -DskipTests
 
 ## Executando a aplicação
 ### Kafka
@@ -92,28 +125,35 @@ Caso não esteja utilizando o virtualenv e queira remover os pacotes baixados no
 Para rodar o a aplicação do Kafka, na raiz deste projeto execute o seguinte comando no prompt de comando ou terminal de seu computador: 
 > docker-compose up -d
 
-O docker irá subir dois containers, sendo um o serviço de coordenação Zookeper responsável por gerenciar aplicações distribuídas, sendo utilziado pelo Kafka para sincronizar as configurações entre diferentes clusters. E o Kafka propriamente dito, onde iremos submeter e consumir mensagens.
+O docker irá subir dois containers, sendo um o serviço de coordenação Zookeper responsável por gerenciar aplicações distribuídas, sendo utilizado pelo Kafka para sincronizar as configurações entre diferentes clusters. E o Kafka propriamente dito, onde iremos submeter e consumir mensagens.
 
 A efeito de curiosidade as imagens referenciadas neste docker-compose são disponibilizados pela comunidade por meio da Confluent, uma empresa fundada pelo criadores do Kafka e que oferecem ferramentas para prover o kafka como um serviço.
 
 Para verificar se os serviços estão funcionando corretamente, execute os seguintes no prompt de comando ou terminal de seu computador:
-- **Zookeper:** docker-compose logs zookeeper | grep -i binding
-  - Deverá ser apresentada uma mensagem como está:
-    > zookeeper_1  | [2019-12-07 20:35:55,221] \
-      INFO binding to port 0.0.0.0/0.0.0.0:32181 \(org.apache.zookeeper.server.NIOServerCnxnFactory)
 
-- **Kafka:** docker-compose logs kafka | grep -i started
-  - Deverá ser apresentada uma mensagem como está:
-    > kafka_1    | [2019-12-07 20:36:55,467] \
-    INFO [SocketServer brokerId=1] Started 1 acceptor threads (kafka.network.SocketServer) \
-    kafka_1      | [2019-12-07 20:36:55,578] \
-    INFO [SocketServer brokerId=1] Started processors for 1 acceptors (kafka.network.SocketServer) \
-    kafka_1      | [2019-12-07 20:36:55,640] \
-    INFO [KafkaServer id=1] started (kafka.server.KafkaServer) \
-    kafka_1      | [2019-12-07 20:36:55,681] \
-    INFO [ReplicaStateMachine controllerId=1] Started replica state machine with initial state -> Map() (kafka.controller.ReplicaStateMachine) \
-    kafka_1      | [2019-12-07 20:36:55,711] \
-    INFO [PartitionStateMachine controllerId=1] Started partition state machine with initial state -> Map() (kafka.controller.PartitionStateMachine)
+- **Zookeper:** 
+> docker-compose logs zookeeper | grep -i binding
+
+Deverá ser apresentada uma mensagem como está:
+  
+> zookeeper_1  | [2019-12-07 20:35:55,221] \
+  INFO binding to port 0.0.0.0/0.0.0.0:32181 \(org.apache.zookeeper.server.NIOServerCnxnFactory)
+
+- **Kafka:** 
+> docker-compose logs kafka | grep -i started
+
+Deverá ser apresentada uma mensagem como está:
+
+> kafka_1    | [2019-12-07 20:36:55,467] \
+INFO [SocketServer brokerId=1] Started 1 acceptor threads (kafka.network.SocketServer) \
+kafka_1      | [2019-12-07 20:36:55,578] \
+INFO [SocketServer brokerId=1] Started processors for 1 acceptors (kafka.network.SocketServer) \
+kafka_1      | [2019-12-07 20:36:55,640] \
+INFO [KafkaServer id=1] started (kafka.server.KafkaServer) \
+kafka_1      | [2019-12-07 20:36:55,681] \
+INFO [ReplicaStateMachine controllerId=1] Started replica state machine with initial state -> Map() (kafka.controller.ReplicaStateMachine) \
+kafka_1      | [2019-12-07 20:36:55,711] \
+INFO [PartitionStateMachine controllerId=1] Started partition state machine with initial state -> Map() (kafka.controller.PartitionStateMachine)
 	
 Agora execute os seguintes comandos para criar e verificar o estado do tópico criado:
 
@@ -124,10 +164,27 @@ Agora execute os seguintes comandos para criar e verificar o estado do tópico c
 ### Producer
 
 A partir da raiz deste projeto execute o seguinte comando em um novo terminal: 
-> python \kafka-producer-python\producer.py
+> python "kafka-producer-python\producer.py"
+
+Importante: Antes de executar o comando acima, atente-se a ter executado os passos descritos em [Configuração do Ambiente](#configuração-do-ambiente).
 
 ### Consumer
-Em desenvolvimento.
+
+Importante: Antes de executar os comando abaixo, atente-se a ter executado os passos descritos em [Configuração do Ambiente](#configuração-do-ambiente).
+
+A partir da raiz deste projeto, execute os seguintes comandos para cada um dos consumers, um por terminal: 
+
+- Consumidor 1
+> cd kafka-first-consumer-java
+> mvnw spring-boot:run
+
+- Consumidor 2
+> cd kafka-second-consumer-java
+> mvnw spring-boot:run
+
+- Consumidor 3
+> cd kafka-third-consumer-java
+> mvnw spring-boot:run
 
 ## Referências
 Os dados utilizados para esse projeto foram obtidos do site do portal da transparência, segundo orientações do professor e podem ser consultados abaixo:
