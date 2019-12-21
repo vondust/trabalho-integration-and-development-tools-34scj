@@ -17,9 +17,13 @@ public class KafkaConsumerService {
 
     private KafkaConsumer<String, String> kafkaConsumer;
 
-    public KafkaConsumerService(String topicName, Properties consumerProperties) {
+    private Long consolePeriodInSeconds;
+
+    public KafkaConsumerService(String topicName, Properties consumerProperties,
+                                Long consolePeriodInSeconds) {
         kafkaConsumer = new KafkaConsumer<>(consumerProperties);
         kafkaConsumer.subscribe(Collections.singletonList(topicName));
+        this.consolePeriodInSeconds = consolePeriodInSeconds;
     }
 
     private List<StateDetail> stateDetails = new ArrayList<>();
@@ -80,7 +84,7 @@ public class KafkaConsumerService {
                             System.out.format(messageFormat, stateDetail.getState(), stateDetail.getInstallmentSum(), stateDetail.getGranteeQuantity());
                         }
                     }
-                }, 0, 20000);
+                }, 0, consolePeriodInSeconds * 1000);
                 alreadyFirstTime = Boolean.TRUE;
             }
         }

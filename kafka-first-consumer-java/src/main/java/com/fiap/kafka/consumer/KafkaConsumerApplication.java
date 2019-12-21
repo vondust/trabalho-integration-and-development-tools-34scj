@@ -22,6 +22,9 @@ public class KafkaConsumerApplication implements CommandLineRunner {
     @Value("${kafka.groupId}")
     private String kafkaGroupId;
 
+    @Value("${console.period.seconds}")
+    private String consolePeriodInSeconds;
+
     private static final Logger logger = Logger.getLogger(KafkaConsumerApplication.class);
 
     public static void main( String[] args ) {
@@ -40,7 +43,8 @@ public class KafkaConsumerApplication implements CommandLineRunner {
 
         Thread consumerThread = new Thread(() -> {
             logger.info("Starting Kafka consumer thread.");
-            new KafkaConsumerService(topicName, consumerProperties).runWorker();
+            new KafkaConsumerService(topicName, consumerProperties,
+                    Long.parseLong(consolePeriodInSeconds)).runWorker();
         });
 
         consumerThread.start();
