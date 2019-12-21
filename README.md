@@ -176,14 +176,17 @@ A partir da raiz deste projeto, execute os seguintes comandos para cada um dos c
 
 - Consumidor 1
 > cd kafka-first-consumer-java
+
 > mvnw spring-boot:run
 
 - Consumidor 2
 > cd kafka-second-consumer-java
+
 > mvnw spring-boot:run
 
 - Consumidor 3
 > cd kafka-third-consumer-java
+
 > mvnw spring-boot:run
 
 ## Referências
