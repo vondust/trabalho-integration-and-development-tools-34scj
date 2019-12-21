@@ -36,23 +36,64 @@ Foram desenvolvidos três consumidores na linguagem java que realizam os seguint
     - A cada consumo de uma mensagem do tópico do kafka é exibido no console o beneficiário que possui o maior valor de parcela,este beneficiário pode ou não ser alterador na medida que forem consumidos outros registros de beneficiários.
 
 - Consumidor 3:
-  - Exibe os dados do beneficiário que estiver sendo consumido.
-  - São exibidas a seguintes informações:
-    - NIS_FAVORECIDO
-    - NOME_FAVORECIDO
-    - VALOR_PARCELA
-    - NOME_MUNICIPIO
-    - UF 
   - Exibe a quantidade total de registros consumidos.  
 
+### Exemplo de funcionamento
+![exemplo](exemplo.gif)
+
+No exemplo acima são apresentados sete terminais, descritos abaixo na sequência em que houve a interação com cada um deles:
+
+| Terminal | Função                        |
+|----------|-------------------------------|
+| 1°       | Iniciar o Zookeeper           |
+| 2°       | Iniciar o Kafka               |
+| 3°       | Criação do tópico             |
+| 4°       | Iniciar o primeiro consumidor |
+| 5°       | Iniciar o segundo consumidor  |
+| 6°       | Iniciar o terceiro consumidor |
+| 7°       | Iniciar o produtor            |
+
+### Exemplo das tarefas do Trello
+![Trello](trello.png)
+
 ## Pré-requisitos
-### Docker
+Dispomos duas formas de rodar os servidores do Zookeeper e do Kafka, a primeira utilizando docker e a segunda instalando as dependências do Zookeeper e do Kafka localmente.
+
+### Se optar por utilizar o Docker
+
+#### Docker
 - [Instruções para instalação no Linux](https://docs.docker.com/install/linux/docker-ce/ubuntu/)
 - [Instruções para instalação no Windows](https://docs.docker.com/docker-for-windows/install/)
 
-### Docker Compose
+#### Docker Compose
 - [Instruções para instalação no Linux](https://docs.docker.com/compose/install/#install-compose)
 - Não se faz necessário para ambiente Windows pois o Docker Compose já está incluso na instalação do Docker.
+
+### Se optar por utilizar a instalação localmente
+
+#### Kafka e Zookeeper
+- [Link para Download](https://www.apache.org/dyn/closer.cgi?path=/kafka/2.4.0/kafka_2.13-2.4.0.tgz)
+- Execute o comando abaixo para descompactar o arquivo baixado a partir da pasta de downloads: 
+  > tar zxf Downloads/kafka_2.13-2.4.0
+
+- Após ter descompactado o código binário, você pode executar alguns conforme exemplos abaixo: 
+  - Para iniciar o zookeeper com as configurações padrão:
+    > bin/zookeeper-server-start.sh config/zookeeper.properties
+  
+  - Para iniciar o kafka com as configurações padrão:
+    > bin/kafka-server-start.sh config/server.properties
+  
+  - Para criar um novo tópico: 
+    > bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic topic-name
+  
+  - Para listar todos os tópicos criados:
+    > bin/kafka-topics.sh --list --bootstrap-server localhost:9092
+  
+  - Para exibir detalhes de um tópico:
+    > bin/kafka-topics.sh  --describe --topic topic-name --bootstrap-server localhost:9092
+  
+  - Para excluir um tópico:
+    > bin/kafka-topics.sh --delete --topic topic-name --bootstrap-server localhost:9092
 
 ### Java
 - Linguagem:
@@ -163,8 +204,13 @@ Agora execute os seguintes comandos para criar e verificar o estado do tópico c
 
 ### Producer
 
-A partir da raiz deste projeto execute o seguinte comando em um novo terminal: 
-> python "kafka-producer-python\producer.py"
+A partir da raiz deste projeto execute os seguintes comandos em um novo terminal: 
+> cd kafka-producer-python
+
+Caso ainda não tenha realizado o download das dependências informe o seguinte comando:
+pip install -r requirements.txt
+
+> python producer.py
 
 Importante: Antes de executar o comando acima, atente-se a ter executado os passos descritos em [Configuração do Ambiente](#configuração-do-ambiente).
 
@@ -177,16 +223,25 @@ A partir da raiz deste projeto, execute os seguintes comandos para cada um dos c
 - Consumidor 1
 > cd kafka-first-consumer-java
 
+> mvn spring-boot:run
+
+Caso não possua o maven instalado localmente, utilize o wrapper:
 > mvnw spring-boot:run
 
 - Consumidor 2
 > cd kafka-second-consumer-java
 
+> mvn spring-boot:run
+
+Caso não possua o maven instalado localmente, utilize o wrapper:
 > mvnw spring-boot:run
 
 - Consumidor 3
 > cd kafka-third-consumer-java
 
+> mvn spring-boot:run
+
+Caso não possua o maven instalado localmente, utilize o wrapper:
 > mvnw spring-boot:run
 
 ## Referências
